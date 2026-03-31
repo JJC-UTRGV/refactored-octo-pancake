@@ -1,0 +1,17 @@
+[Ll]ibrary/
+[Tt]emp/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+
+*.csproj
+*.unityproj
+*.sln
+*.user
+*.tmp
+*.booproj
+*.svd
+
+.vscode/
+.DS_Store
