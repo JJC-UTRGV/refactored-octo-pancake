@@ -3,83 +3,198 @@ using UnityEngine.InputSystem;
 
 public class BallController : MonoBehaviour
 {
-    public Transform aimIndicator;
-    public float maxForce = 10f;
+    [Header("References")]
+    [SerializeField] private LineRenderer aimLine;
+    [SerializeField] private Transform cameraTransform;
+    [SerializeField] private Collider ballCollider;
 
-    Vector3 startPosition;
-    Rigidbody rb;
+    [Header("Shot Settings")]
+    [SerializeField] private float maxForce = 10f;
+    [SerializeField] private float dragToForce = 100f;
+    [SerializeField] private float minDragDistance = 10f;
 
-    Vector2 dragStart;
-    bool dragging = false;
+    [Header("Aim Line")]
+    [SerializeField] private float minLineLength = 0.8f;
+    [SerializeField] private float maxLineLength = 2.5f;
+    [SerializeField] private float lineStartWidth = 0.08f;
+    [SerializeField] private float lineEndWidth = 0.04f;
+    [SerializeField] private float indicatorGap = 0.05f;
+    [SerializeField] private float verticalOffset = 0.03f;
+
+    [Header("State Checks")]
+    [SerializeField] private float stopThreshold = 0.1f;
+    [SerializeField] private float fallHeight = -5f;
+
+    private Vector3 startPosition;
+    private Rigidbody rb;
+
+    private Vector2 dragStart;
+    private bool dragging = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        aimIndicator.gameObject.SetActive(false);
         startPosition = transform.position;
+
+        if (ballCollider == null)
+            ballCollider = GetComponent<Collider>();
+
+        if (cameraTransform == null && Camera.main != null)
+            cameraTransform = Camera.main.transform;
+
+        if (aimLine != null)
+        {
+            aimLine.positionCount = 2;
+            aimLine.useWorldSpace = true;
+            aimLine.startWidth = lineStartWidth;
+            aimLine.endWidth = lineEndWidth;
+            aimLine.enabled = false;
+        }
     }
 
     void Update()
     {
-        if (transform.position.y < -5f)
-        {
-            ResetBall();
-        }
-        HandleAim();
         CheckFall();
+        HandleAim();
     }
 
     void HandleAim()
     {
-        if (rb.linearVelocity.magnitude > 0.1f) return;
+        if (Mouse.current == null || aimLine == null || cameraTransform == null)
+            return;
+
+        if (BallIsMoving())
+        {
+            CancelAim();
+            return;
+        }
+
+        if (Mouse.current.rightButton.isPressed)
+            return;
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             dragStart = Mouse.current.position.ReadValue();
             dragging = true;
-            aimIndicator.gameObject.SetActive(true);
+            aimLine.enabled = true;
         }
 
-        if (dragging)
+        if (!dragging)
+            return;
+
+        Vector2 currentMouse = Mouse.current.position.ReadValue();
+        Vector2 drag = dragStart - currentMouse;
+        float dragLength = drag.magnitude;
+
+        if (dragLength > 0.01f)
         {
-            Vector2 currentMouse = Mouse.current.position.ReadValue();
-            Vector2 drag = dragStart - currentMouse;
+            Vector3 direction = GetCameraRelativeDirection(drag);
 
-            Vector3 direction = new Vector3(drag.x, 0, drag.y).normalized;
-
-            aimIndicator.position = transform.position + direction * 1.2f;
-            aimIndicator.forward = direction;
-
-            if (Mouse.current.leftButton.wasReleasedThisFrame)
+            if (direction.sqrMagnitude > 0.0001f)
             {
-                Shoot(drag.magnitude);
-                dragging = false;
-                aimIndicator.gameObject.SetActive(false);
+                float force = Mathf.Clamp(dragLength / dragToForce, 0f, maxForce);
+                float powerPercent = maxForce > 0f ? force / maxForce : 0f;
+
+                UpdateAimLine(direction, powerPercent);
             }
+        }
+
+        if (Mouse.current.leftButton.wasReleasedThisFrame)
+        {
+            if (dragLength >= minDragDistance)
+            {
+                Vector3 shotDirection = GetCameraRelativeDirection(drag);
+                Shoot(shotDirection, dragLength);
+            }
+
+            CancelAim();
         }
     }
 
-    void Shoot(float dragLength)
+    Vector3 GetCameraRelativeDirection(Vector2 drag)
     {
-        float force = Mathf.Clamp(dragLength / 100f, 0, maxForce);
+        Vector3 camForward = cameraTransform.forward;
+        Vector3 camRight = cameraTransform.right;
 
-        rb.AddForce(aimIndicator.forward * force, ForceMode.Impulse);
+        camForward.y = 0f;
+        camRight.y = 0f;
+
+        camForward.Normalize();
+        camRight.Normalize();
+
+        Vector3 direction = (camRight * drag.x) + (camForward * drag.y);
+        return direction.normalized;
+    }
+
+    Vector3 GetBallCenter()
+    {
+        if (ballCollider != null)
+            return ballCollider.bounds.center;
+
+        return transform.position;
+    }
+
+    float GetBallRadius()
+    {
+        if (ballCollider != null)
+        {
+            Vector3 extents = ballCollider.bounds.extents;
+            return Mathf.Max(extents.x, extents.z);
+        }
+
+        return 0.5f;
+    }
+
+    void UpdateAimLine(Vector3 direction, float powerPercent)
+    {
+        float lineLength = Mathf.Lerp(minLineLength, maxLineLength, powerPercent);
+        float ballRadius = GetBallRadius();
+
+        Vector3 center = GetBallCenter() + Vector3.up * verticalOffset;
+        Vector3 start = center + direction * (ballRadius + indicatorGap);
+        Vector3 end = start + direction * lineLength;
+
+        aimLine.startWidth = lineStartWidth;
+        aimLine.endWidth = lineEndWidth;
+
+        aimLine.SetPosition(0, start);
+        aimLine.SetPosition(1, end);
+    }
+
+    void Shoot(Vector3 direction, float dragLength)
+    {
+        float force = Mathf.Clamp(dragLength / dragToForce, 0f, maxForce);
+        rb.AddForce(direction * force, ForceMode.Impulse);
 
         GameManager.Instance.AddStroke();
     }
 
+    bool BallIsMoving()
+    {
+        return rb.linearVelocity.magnitude > stopThreshold;
+    }
+
+    void CancelAim()
+    {
+        dragging = false;
+
+        if (aimLine != null)
+            aimLine.enabled = false;
+    }
+
     void CheckFall()
     {
-        if (transform.position.y < -5)
+        if (transform.position.y < fallHeight)
         {
-            GameManager.Instance.RespawnBall();
+            ResetBall();
         }
     }
+
     void ResetBall()
     {
+        CancelAim();
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-
         transform.position = startPosition;
     }
 }
