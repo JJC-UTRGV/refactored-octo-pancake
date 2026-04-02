@@ -23,10 +23,10 @@ public class BallController : MonoBehaviour
     {
         if (transform.position.y < -5f)
         {
-            // ResetBall();
+            ResetBall();
         }
         HandleAim();
-        //CheckFall();
+        CheckFall();
     }
 
     void HandleAim()
@@ -68,13 +68,13 @@ public class BallController : MonoBehaviour
         GameManager.Instance.AddStroke();
     }
 
-    // void CheckFall()
-    // {
-    //     if (transform.position.y < -5)
-    //     {
-    //         GameManager.Instance.RespawnBall();
-    //     }
-    // }
+    void CheckFall()
+    {
+        if (transform.position.y < -5)
+        {
+            GameManager.Instance.RespawnBall();
+        }
+    }
     void ResetBall()
     {
         rb.linearVelocity = Vector3.zero;
