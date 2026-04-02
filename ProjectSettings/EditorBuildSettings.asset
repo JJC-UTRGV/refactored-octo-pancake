@@ -8,6 +8,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Game.unity
+    guid: ed46b91d9a1696c44a16769a650b5b8b
+  - enabled: 1
+    path: Assets/Scenes/Hole 2.unity
+    guid: d748c08997b25e1428408c5058ca5161
+  - enabled: 1
+    path: Assets/Scenes/GameComplete.unity
+    guid: a2b1c4416c11e1247b780d81bef69445
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
