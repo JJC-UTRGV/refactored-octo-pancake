@@ -5,6 +5,9 @@ public class HoleTrigger : MonoBehaviour
     [Header("Hole")]
     public Transform holeCenter;
 
+    [Header("Score")]
+    public string holeName = "Hole1";
+
     [Header("Transition")]
     [SerializeField] private bool isFinalHole = false;
     [SerializeField] private string nextSceneName = "Level2";
@@ -12,7 +15,7 @@ public class HoleTrigger : MonoBehaviour
 
     private bool completed = false;
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (completed) return;
         if (!other.CompareTag("Ball")) return;
@@ -28,7 +31,12 @@ public class HoleTrigger : MonoBehaviour
 
         other.transform.position = holeCenter.position;
 
-        Debug.Log("Completed!");
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.SaveHole(holeName);
+        }
+
+        Debug.Log("Hole Complete!");
 
         if (isFinalHole && transitionOverlay != null)
         {

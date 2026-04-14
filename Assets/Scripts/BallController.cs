@@ -55,6 +55,7 @@ public class BallController : MonoBehaviour
     void Update()
     {
         CheckFall();
+        StopBallIfSlow();
         HandleAim();
     }
 
@@ -167,11 +168,22 @@ public class BallController : MonoBehaviour
         rb.AddForce(direction * force, ForceMode.Impulse);
 
         GameManager.Instance.AddStroke();
+        ScoreManager.Instance.AddStroke();
     }
 
     bool BallIsMoving()
     {
         return rb.linearVelocity.magnitude > stopThreshold;
+    }
+
+    void StopBallIfSlow()
+    {
+        if (rb.linearVelocity.magnitude < stopThreshold &&
+            rb.angularVelocity.magnitude < stopThreshold)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
     }
 
     void CancelAim()
