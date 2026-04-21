@@ -3,28 +3,27 @@ using UnityEngine.SceneManagement;
 
 public class MenuLogic : MonoBehaviour
 {
-    // ADD THIS LINE HERE:
-    public GameObject settingsPanel;
+    public GameObject scorePanel;
 
-    // Now the rest of your code will work!
     public void StartGame()
     {
         SceneManager.LoadScene("Game");
     }
 
-    public void OpenSettings()
+    public void OpenScores()
     {
-        settingsPanel.SetActive(true);
+        scorePanel.SetActive(true);
     }
 
-    public void CloseSettings()
+    public void CloseScores()
     {
-        settingsPanel.SetActive(false);
+        scorePanel.SetActive(false);
     }
 
     public void QuitGame()
     {
         Application.Quit();
+
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
