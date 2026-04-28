@@ -3,10 +3,23 @@ using UnityEngine.SceneManagement;
 
 public class MenuLogic : MonoBehaviour
 {
-    // ADD THIS LINE HERE:
+    [SerializeField]
     public GameObject settingsPanel;
 
-    // Now the rest of your code will work!
+    void Start()
+    {
+        if (settingsPanel == null)
+            return;
+
+        SettingsPanelController settingsController = settingsPanel.GetComponent<SettingsPanelController>();
+
+        if (settingsController == null)
+            settingsController = settingsPanel.AddComponent<SettingsPanelController>();
+
+        settingsController.Initialize(this);
+        settingsPanel.SetActive(false);
+    }
+
     public void StartGame()
     {
         SceneManager.LoadScene("Game");
@@ -14,12 +27,14 @@ public class MenuLogic : MonoBehaviour
 
     public void OpenSettings()
     {
-        settingsPanel.SetActive(true);
+        if (settingsPanel != null)
+            settingsPanel.SetActive(true);
     }
 
     public void CloseSettings()
     {
-        settingsPanel.SetActive(false);
+        if (settingsPanel != null)
+            settingsPanel.SetActive(false);
     }
 
     public void QuitGame()
