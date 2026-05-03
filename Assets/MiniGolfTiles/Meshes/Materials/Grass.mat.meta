@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f3fd3cb9f5d9a914f8be5465cbbc480b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 262280
+  packageName: Mini Golf Course Tiles
+  packageVersion: 2.0
+  assetPath: Assets/MiniGolfTiles/Meshes/Materials/Grass.mat
+  uploadId: 883484

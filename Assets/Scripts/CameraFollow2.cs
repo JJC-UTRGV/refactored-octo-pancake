@@ -28,7 +28,7 @@ public class CameraFollow2 : MonoBehaviour
     {
         if (target == null) return;
 
-        Vector3 dir = (transform.position - target.position).normalized;
+        Vector3 dir = (target.position - transform.position).normalized;
         yaw = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
     }
 

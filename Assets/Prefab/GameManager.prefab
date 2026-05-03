@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdcdc6a921d8e3c4a89382b127abd061, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  ball: {fileID: 0}
+  ball: {fileID: 291173471537853386, guid: 27c322cc6051d804fb3343f1f0b99cf2, type: 3}
   spawnPoint: {x: 0, y: 0, z: 0}
   strokeText: {fileID: 0}
