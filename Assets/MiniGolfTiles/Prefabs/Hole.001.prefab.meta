@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c400ab959fbed2b4eb7a49ef578d4430
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 262280
+  packageName: Mini Golf Course Tiles
+  packageVersion: 2.0
+  assetPath: Assets/MiniGolfTiles/Prefabs/Hole.001.prefab
+  uploadId: 883484

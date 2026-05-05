@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f9f530ebd3d209e4495d7c3c2ec90ab3
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 262280
+  packageName: Mini Golf Course Tiles
+  packageVersion: 2.0
+  assetPath: Assets/MiniGolfTiles/Meshes/Materials/Sand.mat
+  uploadId: 883484
