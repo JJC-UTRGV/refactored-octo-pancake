@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Hole 3.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/MainMenu.unity
+    guid: 569c3ca683bc8f245a772cc788a10e5f
   - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: ed46b91d9a1696c44a16769a650b5b8b
@@ -15,14 +15,17 @@ EditorBuildSettings:
     path: Assets/Scenes/Hole 2.unity
     guid: d748c08997b25e1428408c5058ca5161
   - enabled: 1
-    path: Assets/Scenes/GameComplete.unity
-    guid: a2b1c4416c11e1247b780d81bef69445
+    path: Assets/Scenes/Hole 3.unity
+    guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
     path: Assets/Scenes/Hole 4.unity
     guid: 37ec3af474a4a25449126c1767f2aade
   - enabled: 1
     path: Assets/Scenes/Hole 5.unity
     guid: 71568c19e468bcf41a085b8185b2b4e4
+  - enabled: 1
+    path: Assets/Scenes/GameComplete.unity
+    guid: a2b1c4416c11e1247b780d81bef69445
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
