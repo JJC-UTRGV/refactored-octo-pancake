@@ -6,11 +6,11 @@ public class HoleTrigger : MonoBehaviour
     public Transform holeCenter;
 
     [Header("Score")]
-    public string holeName = "Hole1";
+    public string holeName = "Hole 1";
 
     [Header("Transition")]
     [SerializeField] private bool isFinalHole = false;
-    [SerializeField] private string nextSceneName = "Level2";
+    [SerializeField] private string nextSceneName = "Hole 2";
     [SerializeField] private LevelTransitionOverlay transitionOverlay;
 
     private bool completed = false;
@@ -31,16 +31,32 @@ public class HoleTrigger : MonoBehaviour
 
         other.transform.position = holeCenter.position;
 
+        int strokesThisHole = 0;
+
         if (ScoreManager.Instance != null)
         {
+            strokesThisHole = ScoreManager.Instance.currentHoleStrokes;
+
             ScoreManager.Instance.SaveHole(holeName);
+
+            if (isFinalHole)
+            {
+                ScoreManager.Instance.SaveTotal();
+            }
+            else
+            {
+                ScoreManager.Instance.ResetHole();
+            }
         }
 
-        Debug.Log("Hole Complete!");
+        Debug.Log(holeName + " Complete!");
 
-        if (isFinalHole && transitionOverlay != null)
+        if (transitionOverlay != null)
         {
-            transitionOverlay.PlayAndLoad("Hole Complete!", nextSceneName);
+            transitionOverlay.PlayAndLoad(
+                holeName + " Complete!\nStrokes: " + strokesThisHole,
+                nextSceneName
+            );
         }
     }
 }
